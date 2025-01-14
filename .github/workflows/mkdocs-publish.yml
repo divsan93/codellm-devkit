@@ -1,0 +1,35 @@
+name: Build Docs & Deploy to Pages
+on:
+  push:
+    branches:
+      - new-gh-pages
+    paths:
+      - "mkdocs.yml"
+
+permissions:
+  contents: read
+  pages: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+  
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+        with:
+          key: mkdocs-material-${{ env.cache_id }}
+          path: .cache
+          restore-keys: |
+            mkdocs-material-
+      - run: pip install mkdocs-material 
+      - run: mkdocs gh-deploy --force
