@@ -15,7 +15,6 @@ site_url: https://ibm.github.io/codellm-devkit/
 # is due to GitHub not presenting /site/ as an option
 # when selecting the dir for Pages.
 docs_dir: docs
-site_dir: _site
 
 copyright: Copyright &copy; 2024 IBM
 
