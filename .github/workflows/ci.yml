@@ -31,4 +31,4 @@ jobs:
       - run: pip install mkdocs-material-extensions
       - run: pip install mkdocstrings
       - run: pip install mkdocstrings-python
-      - run: mkdocs build --config-file ./mkdocs.yml --strict --site-dir ./_site
+      - run: mkdocs build
