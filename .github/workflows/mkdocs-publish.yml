@@ -1,35 +1,29 @@
-name: Build Docs & Deploy to Pages
+name: mkdocs-deploy 
 on:
   push:
     branches:
-      - new-gh-pages
-    paths:
-      - "mkdocs.yml"
-
+      - master 
+      - main
 permissions:
-  contents: read
-  pages: write
-
-concurrency:
-  group: "pages"
-  cancel-in-progress: false
-  
+  contents: write
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout the code
-        uses: actions/checkout@v4
-
+      - uses: actions/checkout@v4
+      - name: Configure Git Credentials
+        run: |
+          git config --global user.name 'GitHub Actions'
+          git config --global user.email 'actions@github.com'
       - name: Set up Python 3.11
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-
-        with:
-          key: mkdocs-material-${{ env.cache_id }}
-          path: .cache
-          restore-keys: |
-            mkdocs-material-
-      - run: pip install mkdocs-material 
-      - run: mkdocs gh-deploy --force
+      - name: Install Dependencies
+        run: pip install mkdocs-material mkdocs-autorefs mkdocs-get-deps mkdocs-material-extensions mkdocstrings mkdocstrings-python
+      - name: Deploy docs
+        uses: mhausenblas/mkdocs-deploy-gh-pages@master
+        # Or use mhausenblas/mkdocs-deploy-gh-pages@nomaterial to build without the mkdocs-material theme
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CONFIG_FILE: ./mkdocs.yml
